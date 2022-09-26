@@ -1,24 +1,43 @@
-# README
+# Profinder
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Requirements
 
-Things you may want to cover:
+To setup this project you must have following dependencies installed in your system
 
-* Ruby version
+```
+ruby version 2.7.1
+rails version 7.0
+yarn
+```
 
-* System dependencies
+## Setup steps
 
-* Configuration
+Cloning the repo
+```
+git clone https://github.com/appsimpactacademy/profinder.git
+```
 
-* Database creation
+Switch to profinder
+```
+cd profinder
+```
 
-* Database initialization
+Setup rails app
+```
+bundle install
+yarn build:css
+rails db:migrate
+rails db:seed
+```
 
-* How to run the test suite
+## Running profinder
 
-* Services (job queues, cache servers, search engines, etc.)
+In the terminal run 
 
-* Deployment instructions
+```
+rails s
+```
 
-* ...
+And then visit http://localhost:3000 for root page
+
+And http://localhost:3000/users for users index page.

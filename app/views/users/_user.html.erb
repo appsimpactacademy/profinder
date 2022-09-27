@@ -1,10 +1,6 @@
 <tr id="user_row_<%= user.id %>">
   <td><%= user.name %></td>
   <td><%= user.email %></td>
-  <td><%= user.city %></td>
-  <td><%= user.state %></td>
-  <td><%= user.country %></td>
-  <td><%= user.contact_number %></td>
   <td>
     <%= link_to "View", user, class: "btn btn-info", data: { controller: 'user-modal' } %>
     <%= link_to "Edit", edit_user_path(user), class: "btn btn-success", data: { controller: 'user-modal' } %>

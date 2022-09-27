@@ -2,8 +2,14 @@
   <td><%= user.name %></td>
   <td><%= user.email %></td>
   <td>
-    <%= link_to "View", user, class: "btn btn-info", data: { controller: 'user-modal' } %>
-    <%= link_to "Edit", edit_user_path(user), class: "btn btn-success", data: { controller: 'user-modal' } %>
-    <%= link_to "Delete", user, data: { turbo_method: :delete, turbo_confirm: 'Are you sure you want to delete this user?' }, class: "btn btn-danger" %>
+    <%= link_to user, class: "btn btn-info", data: { controller: 'user-modal' } do %>
+      <i class="bi bi-eye"></i>
+    <% end %>
+    <%= link_to edit_user_path(user), class: "btn btn-success", data: { controller: 'user-modal' } do %>
+      <i class="bi bi-pencil"></i>
+    <% end %>
+    <%= link_to user, data: { turbo_method: :delete, turbo_confirm: 'Are you sure you want to delete this user?' }, class: "btn btn-danger" do %>
+      <i class="bi bi-trash"></i>
+    <% end %>
   </td>
 </tr>

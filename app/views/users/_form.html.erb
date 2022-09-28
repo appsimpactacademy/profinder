@@ -28,13 +28,11 @@
     </div>
 
     <div class="form-group">
-      <%= form.label :state, class: "form-label mb-2 mt-3" %>
-      <%= form.text_field :state, class: "form-control form-control-lg" %>
+      <%= form.label :country, class: "form-label mb-2 mt-3" %>
+      <%= form.country_select :country, {prompt: 'Select country'}, {class: "form-select form-select-lg", data: { controller: "countries" }} %>
     </div>
 
-    <div class="form-group">
-      <%= form.label :country, class: "form-label mb-2 mt-3" %>
-      <%= form.text_field :country, class: "form-control form-control-lg" %>
+    <div class="form-group" id="country_states_list">
     </div>
 
     <div class="form-group">

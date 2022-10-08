@@ -3,7 +3,7 @@ FactoryBot.define do
     name { Faker::Name.name_with_middle }
     email { Faker::Internet.email }
     contact_number { Faker::PhoneNumber.cell_phone_with_country_code }
-    country { 'India' }
+    country { User.country_code_list.sample }
     state { 'MP' }
     city { 'Indore' }
   end

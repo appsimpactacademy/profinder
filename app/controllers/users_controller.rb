@@ -29,7 +29,7 @@ class UsersController < ApplicationController
         format.html { redirect_to user_url(@user), notice: "User was successfully created." }
         format.json { render :show, status: :created, location: @user }
       else
-        format.turbo_stream { render turbo_stream: turbo_stream.replace('remote_modal', partial: 'users/form_modal', locals: {user: @user}) }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace('remote_modal', partial: 'users/modal', locals: {user: @user, modal_title: 'Create New User', partial_name: 'form'}) }
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
@@ -44,7 +44,7 @@ class UsersController < ApplicationController
         format.html { redirect_to user_url(@user), notice: "User was successfully updated." }
         format.json { render :show, status: :ok, location: @user }
       else
-        format.turbo_stream { render turbo_stream: turbo_stream.replace('remote_modal', partial: 'users/form_modal', locals: {user: @user}) }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace('remote_modal', partial: 'users/modal', locals: {user: @user, modal_title: 'Edit User', partial_name: 'form'}) }
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end

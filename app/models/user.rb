@@ -1,6 +1,10 @@
 class User < ApplicationRecord
-  validates :name, :city, :country, :contact_number, presence: true
-  validates :email, presence: true, uniqueness: true 
+
+  has_many :user_skills
+  has_many :skills, through: :user_skills
+
+  validates :name, :city, :country, presence: true
+  validates :email, :contact_number, presence: true, uniqueness: true 
 
   before_save :check_state_present
   validate :validate_country

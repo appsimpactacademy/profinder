@@ -11,7 +11,7 @@
     email: Faker::Internet.email,
     city: Faker::Address.city,
     state: Faker::Address.state,
-    country: Faker::Address.country,
+    country: User.country_code_list.sample,
     contact_number: Faker::PhoneNumber.phone_number_with_country_code
   )
 end

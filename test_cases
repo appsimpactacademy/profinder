@@ -1,0 +1,97 @@
+#Feature specs, a kind of acceptance test, are high-level tests that walk through your entire application ensuring that each of the components work together. They’re written from the perspective of a user clicking around the application and filling in forms. We use RSpec and Capybara, which allow you to write tests that can interact with the web page in this manner.
+
+# for writing the features specs we need to install the capybara and webdrivers gems into our Rails app.
+# capybara allows us to interact with web browser using ruby code, eg: click_link 'Go to next page' .
+# webdrivers is responsible for downloading the driver needed to control the web browser (eg: chromedriver), and we will use this driver to launch and run automated action on the web browser.
+
+#Include these 3 gems in the Gemfile, inside the :development, :test and :test group like this :
+
+group :test do
+  gem 'capybara'
+  gem 'webdrivers', '~> 4.0', require: false
+end
+
+# If you are using an existing Rails app, the capybara and webdrivers gem might be already included in the :test group, then you only need to add rspec-rails to the :development, :test group.
+
+#Remember to require the webdrivers gem at the top of spec/rails_helper.rb :
+require 'webdrivers'
+
+# and for webdrivers gem worked we need to add some setting in our rails_helper.rb file.
+Capybara.register_driver :chrome do |app|
+ Capybara::Selenium::Driver.new(app, :browser => :chrome)
+end
+Capybara.current_driver = :chrome
+This settings indicating we are useing chrome browser to launch and run automated action.
+
+# now let's test our first test case for creating new user. create a file create_user_spec.rb in users folder.
+#in this file write the basic syntex which we used for writing the feature test case.
+
+require 'rails_helper'
+
+RSpec.describe 'Users show', type: :feature do
+end
+# this is the basic syntex which we used here we need to set the 'type: :feature' for mentioning this is the feature specs.
+
+# after that we can use 'scenario' keywork this is similar to the it/example  bolck. here we can add some comment for this particular spec. 
+
+feature and scenario are a part of Capybara, and not RSpec, and are meant to be used for acceptance tests. feature is equivalent to describe / context , and scenario equivalent to it / example . If you're writing acceptance tests with Capybara, use the feature / scenario syntax, if not use describe / it syntax.
+
+# in this bolck we used some methods for filling and submiting the form.
+- first we used visit method to get the users page. where we click on the `New user` button with the `click_link` method.
+
+- We can use the fill_in method from Capybara to fill in text into the Title and URL text field. We can pass the label of the text field, or name of the input, or id of the input as the first parameter.
+
+- Here we have one slecet field for selecting the value we can use find method and select the particular option. for this we need to use this syntex.
+find(:css, '#user_country').find(:option, 'India').select_option
+
+- after filling all the input we used `click_button` method to click on the `create user` button for submitting the form.
+
+** Now lets come on the users index page specs. first create the  users_spec.rb file in users folders.
+
+- use the basic syntex which we used before.
+- in the feature bolck create one user with the factorybot. then we used this user for index page.
+- here in the scenario block we need to first visit the users page.
+- after that we need to check the page have the content of user or not. for testing this we used this syntex which capybara provide.
+`page.should have_content('Users')`
+`page.should have_content(user.name)`
+
+
+** Now lets come on the users show page specs. first create the  user_spec.rb file in users folders.
+- use the basic syntex which we used before.
+- in the feature bolck create one user with the factorybot. then we used this user for show page.
+- here in the scenario block we need to first visit the users page.
+- on the users page we click on the eye icon for showing the particular users details. here we using the modal popup for showing users deatils. we used this syntex to click on the eye icon
+click_link("user-#{user.id}")
+- after that we need to check that modal have the particular user content o not. for this we used this syntex.
+within('#exampleModal') do
+	page.should have_content('User Details')
+	page.should have_content("Name: #{user.name}")
+	page.should have_content("Email: #{user.email}")
+end
+- here we need to use `within` method for testing the particular modal have this content or not.
+
+
+** Now lets come on the users update specs. first create the update_user_spec.rb file in users folders.
+- use the basic syntex which we used before.
+- in the feature bolck create one user with the factorybot also mentioned the name of the user for testing the name is update or not after running specs. i.e
+let!(:user) { create(:user, name: 'Testuser6') }
+- here in the scenario block we need to first visit the users page. 
+- on the users page we click on the pencil icon for showing the particular users edit form. here we using the modal popup for showing users edit form. we used same syntex for clicking on the pencil icon which we used for show action. we only need to change id here which we used in the link.
+- after click on the linck the modal popup is opened here we used `fill_in` method for change the name of the user.
+- after fill the name we used `within` method to check in the modal popup update user button present or not. and click on that button. we used this syntex.
+within('#exampleModal') do
+  click_button 'Update User'
+end
+- after click on the update button we visit the users page and check if the user name is updated or not.we used expect method for this.
+expect(user.reload.name).to eq('Testuser90')
+
+** Now lets come on the users delete specs. first create the delete_user_spec.rb file in users folders.
+- use the basic syntex which we used before.
+- in the feature bolck create one user with the factorybot.
+- here in the scenario block we need to first visit the users page.
+- in this spec we need to click on the destroy icon and also accept the confirm box so here we can use this syntex.
+page.accept_confirm do
+  click_link("user-#{user.id}-delete")
+end
+- after that visit the users page. and check this user conent present or not which we delete.
+

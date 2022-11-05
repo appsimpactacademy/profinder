@@ -16,6 +16,10 @@
   )
 end
 
+User.all.each do |user|
+  user.update(password: 'password@123')
+end
+
 FrontEndSkill.find_or_create_by(name: 'HTML')
 FrontEndSkill.find_or_create_by(name: 'CSS3')
 FrontEndSkill.find_or_create_by(name: 'JavaScript')

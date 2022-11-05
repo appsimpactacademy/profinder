@@ -5,7 +5,7 @@
 To setup this project you must have following dependencies installed in your system
 
 ```
-ruby version 2.7.1
+ruby version 3.1.2
 rails version 7.0
 yarn
 ```

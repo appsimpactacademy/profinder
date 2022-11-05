@@ -76,3 +76,4 @@ end
 gem 'cssbundling-rails'
 gem 'faker'
 gem 'country_select', '~> 6.0'
+gem 'devise'

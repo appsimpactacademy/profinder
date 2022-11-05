@@ -9,6 +9,7 @@
   User.create(
     name: Faker::Name.name_with_middle,
     email: Faker::Internet.email,
+    password: 'password@123',
     city: Faker::Address.city,
     state: Faker::Address.state,
     country: User.country_code_list.sample,

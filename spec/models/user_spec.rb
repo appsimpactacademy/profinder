@@ -5,6 +5,7 @@ RSpec.describe User, type: :model do
     let(:user) { build :user } 
     let(:user1) { create :user, state: nil }
     let(:user2) { build :user, email: user.email, contact_number: user.contact_number }
+    let(:user3) { build :user, country: 'IN' }
 
     it 'should be valid user with all attributes' do
       expect(user.valid?).to eq(true)
@@ -14,10 +15,16 @@ RSpec.describe User, type: :model do
       expect(user1.state).to eq(user1.country)
     end
 
-    it 'should raise invalid record exception for duplicate email and contact' do 
+    it 'should raise invalid record exception for duplicate email and contact' do
       user.save
       expect(user2.save).to eq(false)
       expect{user2.save!}.to raise_error(ActiveRecord::RecordInvalid)
+    end
+
+    it 'should save the full country name from the country code' do 
+      user3.save
+      expect(user3.full_country_name).to_not eq(nil)
+      expect(user3.full_country_name).to eq('India')
     end
   end
 

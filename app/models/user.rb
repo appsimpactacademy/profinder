@@ -11,7 +11,12 @@ class User < ApplicationRecord
   validates :email, :contact_number, presence: true, uniqueness: true 
 
   before_save :check_state_present
+  before_save :set_full_country_name
   validate :validate_country
+
+  def set_full_country_name
+    self.full_country_name = country_name
+  end
 
   def country_name
     country = ISO3166::Country[self.country]
@@ -32,6 +37,10 @@ class User < ApplicationRecord
 
   def self.country_code_list
     ISO3166::Country.all.map { |country| country.alpha2 }
+  end
+
+  def self.country_name_list
+    ISO3166::Country.all.map { |country| country.name }
   end
 
 end

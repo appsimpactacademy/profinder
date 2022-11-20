@@ -61,6 +61,59 @@ RSpec.describe UsersController do
       expect(response).to render_template('users/_user')
     end
 
+    it 'should renders the validation errors into form' do 
+      post :create, params: {
+        user: {
+          name: nil,
+          email: nil,
+          password: 'password@123',
+          contact_number: Faker::PhoneNumber.cell_phone_with_country_code,
+          country: User.country_code_list.sample,
+          state: 'MP',
+          city: 'Indore'
+        },
+        format: :turbo_stream
+      }
+      expect(assigns(:user).valid?).to_not eq(true)
+      expect(response).to render_template('users/_modal')
+    end
+
+    it 'should includes the error messages for empty attributes' do 
+      post :create, params: {
+        user: {
+          name: nil,
+          email: nil,
+          password: 'password@123',
+          contact_number: Faker::PhoneNumber.cell_phone_with_country_code,
+          country: User.country_code_list.sample,
+          state: 'MP',
+          city: 'Indore'
+        },
+        format: :turbo_stream
+      }
+      expect(assigns(:user).valid?).to_not eq(true)
+      expect(response).to render_template('users/_modal')
+      expect(assigns(:user).errors.full_messages).to include("Email can't be blank", "Name can't be blank")
+    end
+
+    it 'should includes the uniqueness error in form' do 
+      post :create, params: {
+        user: {
+          name: Faker::Name.name_with_middle,
+          email: user.email,
+          password: 'password@123',
+          contact_number: Faker::PhoneNumber.cell_phone_with_country_code,
+          country: User.country_code_list.sample,
+          state: 'MP',
+          city: 'Indore'
+        },
+        format: :turbo_stream
+      }
+      expect(assigns(:user).valid?).to_not eq(true)
+      expect(response).to render_template('users/_modal')
+      expect(assigns(:user).errors.full_messages).to include("Email has already been taken")
+    end
+
     def user_params
       {
         name: Faker::Name.name_with_middle,

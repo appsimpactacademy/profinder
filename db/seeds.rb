@@ -54,3 +54,12 @@ UserSkill.create(user: User.last, skill: Skill.find(8), rating: 8)
 UserSkill.create(user: User.last, skill: Skill.find(6), rating: 8)
 UserSkill.create(user: User.last, skill: Skill.find(7), rating: 8)
 UserSkill.create(user: User.last, skill: Skill.find(9), rating: 8)
+
+
+# Skill.create(name: 'C++', type: 'any_type')
+
+# Skill.insert_all([
+#   { name: 'sample skill', type: '' },
+#   { name: 'sample skill', type: 'sometype' },
+#   { name: 'sasmple skill', type: 'sample_type' }
+# ])

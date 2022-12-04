@@ -113,17 +113,25 @@ RSpec.describe UsersController do
       expect(response).to render_template('users/_modal')
       expect(assigns(:user).errors.full_messages).to include("Email has already been taken")
     end
+  end
 
-    def user_params
-      {
-        name: Faker::Name.name_with_middle,
-        email: Faker::Internet.email,
-        password: 'password@123',
-        contact_number: Faker::PhoneNumber.cell_phone_with_country_code,
-        country: User.country_code_list.sample,
-        state: 'MP',
-        city: 'Indore'
-      }
+  describe 'PATCH update' do
+    let(:user) { create :user }
+
+    before(:each) do 
+      sign_in(user)
     end
   end
+end
+
+def user_params
+  {
+    name: Faker::Name.name_with_middle,
+    email: Faker::Internet.email,
+    password: 'password@123',
+    contact_number: Faker::PhoneNumber.cell_phone_with_country_code,
+    country: User.country_code_list.sample,
+    state: 'MP',
+    city: 'Indore'
+  }
 end

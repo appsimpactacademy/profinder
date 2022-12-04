@@ -115,12 +115,107 @@ RSpec.describe UsersController do
     end
   end
 
-  describe 'PATCH update' do
+  describe 'PATCH update' do 
     let(:user) { create :user }
+    let(:user1) { create :user }
+    let(:user2) { create :user }
 
     before(:each) do 
       sign_in(user)
     end
+
+    it 'should accepts the params with html format' do 
+      patch :update, params: {
+        user: user_params,
+        id: user1.id
+      }
+      expect(response.media_type).to eq('text/html')
+      expect(response.content_type).to eq('text/html; charset=utf-8')
+    end
+
+    it 'should accepts the params with turbo_stream format' do 
+      patch :update, params: {
+        user: user_params,
+        id: user1.id,
+        format: :turbo_stream
+      }
+      expect(response.media_type).to eq('text/vnd.turbo-stream.html')
+      expect(response.content_type).to eq('text/vnd.turbo-stream.html; charset=utf-8')
+    end
+
+    it 'should redirect to user showpage with html format' do 
+      patch :update, params: {
+        user: user_params,
+        id: user2.id
+      }
+      expect(subject).to redirect_to(assigns(:user))
+    end
+
+    it 'should render the user partial with turbo_stream format' do 
+      patch :update, params: {
+        user: user_params,
+        id: user2.id,
+        format: :turbo_stream
+      }
+      expect(response).to render_template('users/_user')
+    end
+
+    it 'should renders the validation errors into form' do 
+      patch :update, params: {
+        user: {
+          name: nil,
+          email: nil,
+          password: 'password@123',
+          contact_number: Faker::PhoneNumber.cell_phone_with_country_code,
+          country: User.country_code_list.sample,
+          state: 'MP',
+          city: 'Indore'
+        },
+        id: user2.id,
+        format: :turbo_stream
+      }
+      expect(assigns(:user).valid?).to_not eq(true)
+      expect(response).to render_template('users/_modal')
+    end
+
+    it 'should includes the error messages for empty attributes' do 
+      patch :update, params: {
+        user: {
+          name: nil,
+          email: nil,
+          password: 'password@123',
+          contact_number: Faker::PhoneNumber.cell_phone_with_country_code,
+          country: User.country_code_list.sample,
+          state: 'MP',
+          city: 'Indore'
+        },
+        id: user1.id,
+        format: :turbo_stream
+      }
+      expect(assigns(:user).valid?).to_not eq(true)
+      expect(response).to render_template('users/_modal')
+      expect(assigns(:user).errors.full_messages).to include("Email can't be blank", "Name can't be blank")
+    end
+
+    it 'should includes the uniqueness error in form' do 
+      patch :update, params: {
+        user: {
+          name: Faker::Name.name_with_middle,
+          email: user.email,
+          password: 'password@123',
+          contact_number: Faker::PhoneNumber.cell_phone_with_country_code,
+          country: User.country_code_list.sample,
+          state: 'MP',
+          city: 'Indore'
+        },
+        id: user1.id,
+        format: :turbo_stream
+      }
+      expect(assigns(:user).valid?).to_not eq(true)
+      expect(response).to render_template('users/_modal')
+      expect(assigns(:user).errors.full_messages).to include("Email has already been taken")
+    end
+
   end
 end
 
